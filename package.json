@@ -1,0 +1,19 @@
+{
+  "name": "skill-bridge",
+  "version": "1.0.0",
+  "description": "AI-Driven Skill Gap Analysis and Career Roadmap Recommender for Engineering Students",
+  "scripts": {
+    "dev": "npm --prefix client run dev",
+    "build": "npm --prefix client run build",
+    "start": "cd backend && python -m uvicorn app.main:app --host 127.0.0.1 --port 8000"
+  },
+  "keywords": [
+    "edtech",
+    "ai",
+    "skill-gap-analysis",
+    "career-roadmap",
+    "engineering"
+  ],
+  "author": "Skill Bridge Team",
+  "license": "MIT"
+}
