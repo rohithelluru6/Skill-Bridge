@@ -310,6 +310,14 @@ def init_db():
                 metrics TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
+
+            CREATE TABLE IF NOT EXISTS anonymous_resource_searches (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                visitor_id TEXT UNIQUE NOT NULL,
+                search_count INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                last_search_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
             """)
             conn.commit()
             logger.info("SQLite database schema initialized successfully.")

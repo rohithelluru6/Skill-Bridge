@@ -69,6 +69,8 @@ export const api = {
   getSkillGapAnalysis: (careerId) => apiRequest('/api/ai/skill-gap-analysis', { method: 'POST', body: JSON.stringify({ career_id: careerId }) }),
   generateRoadmap: (payload = {}) => apiRequest('/api/ai/generate-roadmap', { method: 'POST', body: JSON.stringify(payload) }),
   recommendResources: (payload = {}) => apiRequest('/api/ai/recommend-resources', { method: 'POST', body: JSON.stringify(payload) }),
+  searchResources: (payload) => apiRequest('/api/ai/search-resources', { method: 'POST', body: JSON.stringify(payload) }),
+  getResourceSearchStatus: (visitorId) => apiRequest(`/api/ai/search-resources/status${visitorId ? `?visitor_id=${encodeURIComponent(visitorId)}` : ''}`),
 
   // Progress
   getProgress: () => apiRequest('/api/progress'),

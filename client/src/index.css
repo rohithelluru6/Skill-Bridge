@@ -18,42 +18,45 @@
 }
 
 /* =========================================================================
-   DARK THEME SYSTEM (Triggered via Logo Click)
+   BLACK & WHITE THEME SYSTEM (Triggered via Skill Bridge Logo Click)
    ========================================================================= */
 html.dark {
   color-scheme: dark;
 }
 
 html.dark body {
-  background-color: #090d16;
-  color: #f8fafc;
+  background-color: #000000;
+  color: #ffffff;
 }
 
-/* Dark theme background overrides */
+/* Dark/B&W background overrides */
 html.dark .bg-slate-50,
+html.dark .bg-slate-50\/40,
+html.dark .bg-slate-50\/50,
 html.dark .bg-slate-50\/60,
 html.dark .bg-slate-50\/70,
 html.dark .bg-slate-50\/80,
 html.dark .bg-slate-50\/90 {
-  background-color: #0b0f19 !important;
+  background-color: #050505 !important;
 }
 
 html.dark .bg-white,
 html.dark .bg-white\/90,
+html.dark .bg-white\/95,
 html.dark .bg-white\/80 {
-  background-color: #111827 !important;
+  background-color: #121212 !important;
 }
 
 html.dark .bg-slate-100 {
-  background-color: #1a2234 !important;
+  background-color: #1a1a1a !important;
 }
 
 html.dark .bg-slate-200,
 html.dark .bg-slate-200\/60 {
-  background-color: #1f293d !important;
+  background-color: #242424 !important;
 }
 
-/* Dark theme text & headings */
+/* Dark/B&W text & headings */
 html.dark h1,
 html.dark h2,
 html.dark h3,
@@ -65,65 +68,70 @@ html.dark .text-slate-900 {
 }
 
 html.dark .text-slate-800 {
-  color: #f1f5f9 !important;
+  color: #f5f5f5 !important;
 }
 
 html.dark .text-slate-700 {
-  color: #e2e8f0 !important;
+  color: #e5e5e5 !important;
 }
 
 html.dark .text-slate-600 {
-  color: #cbd5e1 !important;
+  color: #d4d4d4 !important;
 }
 
 html.dark .text-slate-500 {
-  color: #94a3b8 !important;
+  color: #a3a3a3 !important;
 }
 
-/* Dark theme borders */
+html.dark .text-slate-400 {
+  color: #888888 !important;
+}
+
+/* Dark/B&W borders */
 html.dark .border-slate-100,
 html.dark .border-slate-200,
 html.dark .border-slate-200\/60,
 html.dark .border-slate-200\/70,
 html.dark .border-slate-200\/80,
 html.dark .border-slate-200\/90,
-html.dark .border-slate-300 {
-  border-color: #1e293b !important;
+html.dark .border-slate-300,
+html.dark .border-slate-800 {
+  border-color: #262626 !important;
 }
 
 html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
 html.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #1e293b !important;
+  border-color: #262626 !important;
 }
 
-/* Dark theme form inputs */
+/* Dark/B&W form inputs */
 html.dark input,
 html.dark select,
 html.dark textarea {
-  background-color: #151c2c !important;
-  color: #f8fafc !important;
-  border-color: #273549 !important;
+  background-color: #161616 !important;
+  color: #ffffff !important;
+  border-color: #333333 !important;
 }
 
 html.dark input::placeholder,
 html.dark textarea::placeholder {
-  color: #64748b !important;
+  color: #737373 !important;
 }
 
-/* Navigation & Sidebar Dark Mode */
+/* Navigation & Sidebar B&W mode */
 html.dark header {
-  background-color: rgba(13, 19, 34, 0.95) !important;
-  border-color: #1e293b !important;
+  background-color: rgba(10, 10, 10, 0.98) !important;
+  border-color: #262626 !important;
 }
 
 html.dark aside {
-  background-color: #0d1322 !important;
-  border-color: #1e293b !important;
+  background-color: #0a0a0a !important;
+  border-color: #262626 !important;
 }
 
 /* Dark card hover effects */
 html.dark .card-hover-effect:hover {
-  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.8), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
 }
 
 /* Custom subtle glass & glow effects */
@@ -134,12 +142,18 @@ html.dark .card-hover-effect:hover {
 }
 
 html.dark .glass-panel {
-  background: rgba(17, 24, 39, 0.85) !important;
-  border-color: rgba(30, 41, 59, 0.8) !important;
+  background: rgba(18, 18, 18, 0.9) !important;
+  border-color: rgba(38, 38, 38, 0.9) !important;
 }
 
 .gradient-text {
   background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html.dark .gradient-text {
+  background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -166,18 +180,18 @@ html.dark .glass-panel {
   background: #f1f5f9;
 }
 html.dark ::-webkit-scrollbar-track {
-  background: #0b0f19;
+  background: #0a0a0a;
 }
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
 }
 html.dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #2e2e2e;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 html.dark ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #404040;
 }

@@ -182,6 +182,15 @@ CREATE TABLE IF NOT EXISTS progress_records (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 15. Anonymous AI Resource Searches (Enforces one-time free search per unauthenticated visitor)
+CREATE TABLE IF NOT EXISTS anonymous_resource_searches (
+    id SERIAL PRIMARY KEY,
+    visitor_id VARCHAR(255) UNIQUE NOT NULL,
+    search_count INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    last_search_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Indexes for performance
 CREATE INDEX IF NOT EXISTS idx_student_skills_user ON student_skills(user_id);
 CREATE INDEX IF NOT EXISTS idx_career_skills_career ON career_required_skills(career_id);

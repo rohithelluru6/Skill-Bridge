@@ -8,6 +8,7 @@ import FloatingChatbot from './components/common/FloatingChatbot';
 
 // Pages
 import LandingPage from './pages/LandingPage';
+import ResourcesPage from './pages/ResourcesPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
@@ -32,6 +33,7 @@ export default function App() {
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<LandingPage />} />
+            <Route path="/resources" element={<ResourcesPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />

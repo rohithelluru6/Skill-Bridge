@@ -1,9 +1,16 @@
 import json
-from fastapi import APIRouter, HTTPException, Depends
+from typing import Optional
+from fastapi import APIRouter, HTTPException, Depends, Request, Query
 from app.database import db
-from app.auth.dependencies import get_current_user
-from app.models.schemas import GapAnalysisRequest, RoadmapGenerateRequest, ResourceRecommendRequest
+from app.auth.dependencies import get_current_user, get_optional_current_user
+from app.models.schemas import (
+    GapAnalysisRequest,
+    RoadmapGenerateRequest,
+    ResourceRecommendRequest,
+    ResourceSearchRequest
+)
 from app.services.ai_service import analyze_skill_gap_ai, generate_career_roadmap_ai
+from app.services.resource_search_service import search_learning_resources_ai
 
 router = APIRouter(prefix="/api/ai", tags=["AI & Recommendations"])
 
@@ -126,3 +133,109 @@ def recommend_resources(req: ResourceRecommendRequest, current_user: dict = Depe
     """, tuple(skill_ids))
     
     return {"resources": resources, "evaluated_skills_count": len(skill_ids)}
+
+
+@router.get("/search-resources/status")
+async def get_resource_search_status(
+    visitor_id: Optional[str] = Query(None),
+    current_user: Optional[dict] = Depends(get_optional_current_user)
+):
+    """
+    Checks if the visitor has free AI searches remaining.
+    Authenticated users enjoy unlimited searches.
+    Anonymous users have 1 free search, tracked in the database.
+    """
+    if current_user:
+        return {
+            "authenticated": True,
+            "search_count": 0,
+            "remaining_searches": 999,
+            "limit_reached": False,
+            "message": "Authenticated student - unlimited AI resource searches."
+        }
+
+    clean_visitor_id = (visitor_id or "").strip()
+    if not clean_visitor_id:
+        return {
+            "authenticated": False,
+            "search_count": 0,
+            "remaining_searches": 1,
+            "limit_reached": False,
+            "message": "1 free AI resource search available."
+        }
+
+    record = db.query_one(
+        "SELECT search_count FROM anonymous_resource_searches WHERE visitor_id = ?",
+        (clean_visitor_id,)
+    )
+    count = record["search_count"] if record else 0
+    limit_reached = count >= 1
+
+    return {
+        "authenticated": False,
+        "search_count": count,
+        "remaining_searches": max(0, 1 - count),
+        "limit_reached": limit_reached,
+        "message": (
+            "Your free AI resource search has been used! Register or log in to Skill Bridge to unlock unlimited access to personalized learning resources."
+            if limit_reached
+            else "1 free AI resource search available."
+        )
+    }
+
+
+@router.post("/search-resources")
+async def search_resources(
+    req: ResourceSearchRequest,
+    request: Request,
+    current_user: Optional[dict] = Depends(get_optional_current_user)
+):
+    """
+    AI-powered learning resource search.
+    - Authenticated users: unlimited searches.
+    - Unregistered / anonymous visitors: exactly ONE free search tracked in database.
+    - If anonymous visitor exceeds 1 search: rejected with 403 Forbidden.
+    """
+    if not req.skill or not req.skill.strip():
+        raise HTTPException(status_code=400, detail="Skill is required to search learning resources.")
+
+    visitor_id = (req.visitor_id or "").strip()
+    if not visitor_id:
+        # Fallback to header or client IP
+        visitor_id = request.headers.get("x-visitor-id") or (request.client.host if request.client else "unknown_visitor")
+
+    # If unauthenticated, enforce strict 1-time search limit via database
+    if not current_user:
+        record = db.query_one(
+            "SELECT search_count FROM anonymous_resource_searches WHERE visitor_id = ?",
+            (visitor_id,)
+        )
+        if record and record["search_count"] >= 1:
+            raise HTTPException(
+                status_code=403,
+                detail="Your free AI resource search has been used! Register or log in to Skill Bridge to unlock unlimited access to personalized learning resources."
+            )
+
+        # Record / increment usage in database
+        if record:
+            db.execute(
+                "UPDATE anonymous_resource_searches SET search_count = search_count + 1, last_search_at = CURRENT_TIMESTAMP WHERE visitor_id = ?",
+                (visitor_id,)
+            )
+        else:
+            db.execute(
+                "INSERT INTO anonymous_resource_searches (visitor_id, search_count, last_search_at) VALUES (?, 1, CURRENT_TIMESTAMP)",
+                (visitor_id,)
+            )
+
+    # Perform AI search
+    resources = await search_learning_resources_ai(req.skill, req.topic)
+
+    return {
+        "resources": resources,
+        "skill": req.skill.strip(),
+        "topic": (req.topic or "").strip(),
+        "is_authenticated": bool(current_user),
+        "remaining_searches": 999 if current_user else 0,
+        "total_results": len(resources)
+    }

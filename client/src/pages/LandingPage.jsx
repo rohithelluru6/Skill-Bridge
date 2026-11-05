@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Compass,
@@ -121,8 +121,19 @@ export default function LandingPage() {
     },
   ];
 
+  // Smooth scroll to target hash section if navigated from another page (e.g. /resources)
+  useEffect(() => {
+    if (window.location.hash) {
+      const id = window.location.hash.replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100);
+      }
+    }
+  }, []);
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col scroll-smooth">
       <Navbar />
 
       {/* Hero Section */}
@@ -396,8 +407,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Sample Student Testimonials */}
-      <section className="py-20 bg-white border-t border-slate-200/80">
+      {/* Sample Student Testimonials - Empowering Students Section (disappears naturally when scrolling) */}
+      <section id="empowering-students" className="relative py-20 bg-white border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
             <span className="text-xs uppercase font-bold tracking-wider text-purple-600 bg-purple-50 px-3 py-1 rounded-full border border-purple-200">

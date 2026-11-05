@@ -8,7 +8,7 @@ class Settings:
     HOST: str = os.getenv("HOST", "0.0.0.0")
     
     # Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/skillbridge")
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./skillbridge.db")
     SQLITE_PATH: str = os.getenv("SQLITE_PATH", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "skillbridge.db"))
     
     # Security

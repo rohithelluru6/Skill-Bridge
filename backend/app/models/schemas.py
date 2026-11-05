@@ -88,3 +88,8 @@ class AdminSkillCreateRequest(BaseModel):
     name: str
     category: str
     description: Optional[str] = None
+
+class ResourceSearchRequest(BaseModel):
+    skill: str
+    topic: Optional[str] = None
+    visitor_id: Optional[str] = None
